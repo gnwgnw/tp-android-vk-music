@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layer"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/textview_for_search_artists"
+        android:layout_width="fill_parent"
+        android:layout_height="180dp"
+        android:text="@string/text_search_artists"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        android:background="#5b9ecd"
+    />
+
+</RelativeLayout>

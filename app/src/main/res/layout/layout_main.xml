@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layer"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/edittext_to_input"
+        android:hint="@string/text_search_songs"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:background="#c8d3db"
+    />
+
+    <ViewFlipper
+        android:id="@+id/flipper_for_search_choice"
+        android:layout_width="fill_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/edittext_to_input"
+    />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/button_to_start_search"
+        android:text="@string/text_for_start_search"
+        android:layout_below="@id/flipper_for_search_choice"
+        android:textSize="80sp"
+        android:textColor="#000000"
+        android:background="#c8d3db"
+    />
+
+
+</RelativeLayout>

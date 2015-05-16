@@ -1,3 +1,9 @@
 <resources>
+
     <string name="app_name">VK Player</string>
+    <string name="text_search_songs">Поиск песни</string>
+    <string name="text_search_artists">Поиск артиста</string>
+    <string name="text_for_search_input">Ввод...</string>
+    <string name="text_for_start_search">GO!</string>
+
 </resources>

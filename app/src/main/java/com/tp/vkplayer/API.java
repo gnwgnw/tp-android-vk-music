@@ -4,7 +4,14 @@ import android.content.Context;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,27 +23,22 @@ public class API {
 	private final String USER_NAME = "";
 	private final String USER_PASSWORD = "";
 	private final String CLIENT_ID = "4917967";
-	
-	private final AccessTokenListener accessTokenListener;
+
+	private final APIListener apiListener;
 	private String accessToken;
 
-	public API(AccessTokenListener accessTokenListener) {
-		this.accessTokenListener = accessTokenListener;
+	public API(APIListener apiListener) {
+		this.apiListener = apiListener;
+		//TODO add token to DB
 	}
 
 	public String initialize(Context context) {
-		String url = new StringBuilder("https://oauth.vk.com")
-				.append("/authorize")
-				.append("?")
-				.append("client_id=")
-				.append(CLIENT_ID)
-				.append("&")
-				.append("response_type=")
-				.append("token")
-				.append("&")
-				.append("scope=")
-				.append("audio")
-				.toString();
+		final Map<String, String> params = new HashMap<>();
+		params.put("client_id", CLIENT_ID);
+		params.put("response_type", "token");
+		params.put("scope", "audio");
+
+		final String url = APIHelper.buildUrl("https://oauth.vk.com/authorize", params);
 
 		WebView webView = new WebView(context);
 		webView.getSettings().setJavaScriptEnabled(true);
@@ -51,7 +53,7 @@ public class API {
 						Matcher m = p.matcher(url);
 						m.find();
 						accessToken = m.group(1);
-						accessTokenListener.onAccessTokenCame();
+						apiListener.onAccessTokenCame();
 					}
 				});
 
@@ -66,15 +68,48 @@ public class API {
 		return webView.getUrl();
 	}
 
-	public List<MusicObject> searchSong(String query, int count, int offset) {
-		return null;
+	public void searchSongs(String query, int performer, int count, int offset) {
+		final Map<String, String> params = new HashMap<>();
+		params.put("access_token", accessToken);
+		params.put("auto_complete", String.valueOf(1));
+		params.put("q", query);
+		params.put("performer_only", String.valueOf(performer));
+		params.put("count", String.valueOf(count));
+		params.put("offset", String.valueOf(offset));
+
+		final String url = APIHelper.buildUrl("https://api.vk.com/method/audio.search", params);
+
+		final RequestAPITask apiTask =
+				new RequestAPITask(new RequestAPITask.RequestAPITaskListener() {
+					@Override
+					public void onPostExecute(String response) {
+						apiListener.onSearchDone(parseSongsResponse(response));
+					}
+				});
+		apiTask.execute(url);
 	}
 
-	private void parseResponse() {
+	private List<SongObject> parseSongsResponse(String response) {
+		final List<SongObject> songs = new LinkedList<>();
 
+		try {
+			JSONObject jsonObject = new JSONObject(response);
+			JSONArray items = jsonObject.getJSONObject("response").getJSONArray("items");
+
+			for (int i = 0; i < items.length(); ++i) {
+				songs.add(new SongObject(items.getJSONObject(i)));
+			}
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return songs;
 	}
 
-	public interface AccessTokenListener {
+	public interface APIListener {
 		void onAccessTokenCame();
+
+		void onSearchDone(List<SongObject> songs);
 	}
 }

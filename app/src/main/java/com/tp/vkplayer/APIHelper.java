@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * author s.titaevskiy on 14.05.15.
  */
@@ -37,17 +39,9 @@ public class APIHelper {
 	public static String httpRequest(String url) {
 		final StringBuilder response = new StringBuilder();
 		HttpURLConnection connection = null;
-		String encodedUrl = "";
 
 		try {
-			encodedUrl = URLEncoder.encode(url, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			connection = (HttpURLConnection) new URL(encodedUrl).openConnection();
+			connection = (HttpsURLConnection) new URL(url).openConnection();
 			connection.connect();
 
 			BufferedReader reader = new BufferedReader(

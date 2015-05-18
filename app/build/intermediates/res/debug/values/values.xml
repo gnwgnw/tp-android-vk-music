@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -30,14 +30,14 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="color_background_search">#424855</color>
     <color name="color_primary">#174d65</color>
     <color name="color_primary_dark">#313741</color>
     <color name="color_primary_text">#174d65</color>
     <color name="color_submit_background_search">#ff176a82</color>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
@@ -162,7 +162,7 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_item_1">Item 1</string>
     <string name="action_item_2">Item 2</string>
@@ -174,7 +174,7 @@
     <string name="mainActivity_text_for_start_search">GO!</string>
     <string name="mainActivity_text_search_artists">Поиск артиста</string>
     <string name="mainActivity_text_search_songs">Поиск песни</string>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/src/main/res/values/themes.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/src/main/res/values/themes.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/color_primary</item>
@@ -182,7 +182,7 @@
         <item name="windowActionBar">false</item>
         <item name="searchViewStyle">@style/MainActivity_style_searchView</item>
     </style>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance">
         <item name="android:textColor">?android:textColorPrimary</item>
@@ -936,7 +936,7 @@
         <item name="android:scaleType">center</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="MainActivity_style_searchView" parent="Widget.AppCompat.SearchView">
 
@@ -945,7 +945,7 @@
         <item name="queryBackground">@color/color_submit_background_search</item>
 
     </style>
-    <!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/home/serg/Projects/tp-android-vk-music/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>

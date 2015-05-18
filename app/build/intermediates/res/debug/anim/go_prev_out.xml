@@ -8,4 +8,4 @@
         android:fromAlpha="1.0" 
         android:toAlpha="1.0" 
         android:duration="400" />
-</set><!-- From: file:/C:/Mily-V/TECHPARK/SEMESTR_3/tp-android-vk-music/app/src/main/res/anim/go_prev_out.xml -->
+</set><!-- From: file:/home/serg/Projects/tp-android-vk-music/app/src/main/res/anim/go_prev_out.xml -->

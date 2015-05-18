@@ -1417,8 +1417,9 @@ containing a value of this type.
         public static final int layout_search_artists=0x7f040019;
         public static final int layout_search_result=0x7f04001a;
         public static final int layout_search_songs=0x7f04001b;
-        public static final int layout_tool_bar=0x7f04001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f04001d;
+        public static final int layout_song_fragment=0x7f04001c;
+        public static final int layout_tool_bar=0x7f04001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f04001e;
     }
     public static final class menu {
         public static final int menu_main=0x7f0d0000;

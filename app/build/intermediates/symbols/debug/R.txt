@@ -445,8 +445,9 @@ int layout layout_saved_songs 0x7f040018
 int layout layout_search_artists 0x7f040019
 int layout layout_search_result 0x7f04001a
 int layout layout_search_songs 0x7f04001b
-int layout layout_tool_bar 0x7f04001c
-int layout support_simple_spinner_dropdown_item 0x7f04001d
+int layout layout_song_fragment 0x7f04001c
+int layout layout_tool_bar 0x7f04001d
+int layout support_simple_spinner_dropdown_item 0x7f04001e
 int menu menu_main 0x7f0d0000
 int mipmap ic_launcher 0x7f030000
 int string abc_action_bar_home_description 0x7f0b0000

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_layer"
+    android:id="@+id/mainActivity_layout_main"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <TextView
-        android:id="@+id/textview_for_search_songs"
         android:layout_width="fill_parent"
         android:layout_height="180dp"
-        android:text="@string/text_search_songs"
+        android:id="@+id/mainActivity_textview_for_search_songs"
+        android:background="@drawable/search_choice_background"
         android:gravity="center"
-        android:textColor="#000000"
+        android:text="@string/mainActivity_text_search_songs"
+        android:textColor="@color/color_primary_text"
         android:textSize="40sp"
-        android:background="#5b9ecd"
-    />
+        android:fontFamily="sans-serif-light"
+        />
 
 </RelativeLayout>

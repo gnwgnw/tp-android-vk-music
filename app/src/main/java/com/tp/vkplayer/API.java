@@ -24,67 +24,71 @@ public class API {
 	private final String USER_NAME = "+79153891621";
 	private final String USER_PASSWORD = "MilyaMilya";
 	private final String CLIENT_ID = "4917967";
-	private final String SP_ACCESS_TOKEN = "access_token";
+	private final String ACCESS_TOKEN = "access_token";
+	private final String EXPIRES_IN = "expires_in";
+	private final String FILL_FORM_JS = "javascript:" +
+			"document.getElementsByName('email')[0].value='" + USER_NAME + "';" +
+			"document.getElementsByName('pass')[0].value='" + USER_PASSWORD + "';" +
+			"document.forms[0].submit();";
 
 	private final APIListener apiListener;
-	private final Activity activity;
+	private final SharedPreferences preferences;
 
 	private String accessToken = null;
 
 	public API(Activity activity, APIListener apiListener) {
 		this.apiListener = apiListener;
-		this.activity = activity;
+		preferences = activity.getPreferences(Context.MODE_PRIVATE);
 
-		//TODO add token to DB
-		SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
-		accessToken = preferences.getString(SP_ACCESS_TOKEN, null);
+		initialize(activity);
 	}
 
-	//TODO make private, move to constructor
-	public void initialize(Context context) {
-		if (accessToken == null) {
-			final Map<String, String> params = new HashMap<>();
-			params.put("client_id", CLIENT_ID);
-			params.put("response_type", "token");
-			params.put("scope", "audio");
-
-			final String url = APIHelper.buildUrl("https://oauth.vk.com/authorize", params);
-
-			WebView webView = new WebView(context);
-			webView.getSettings().setJavaScriptEnabled(true);
-			CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
-
-			webView.setWebViewClient(new WebViewClient() {
-				@Override
-				public void onPageFinished(WebView view, String url) {
-					view.setWebViewClient(new WebViewClient() {
-						@Override
-						public void onPageFinished(WebView view, String url) {
-							accessToken = APIHelper.getAccessTokenFromUrl(url);
-
-							SharedPreferences preferences =
-									activity.getPreferences(Context.MODE_PRIVATE);
-							SharedPreferences.Editor editor = preferences.edit();
-							editor.putString(SP_ACCESS_TOKEN, accessToken);
-							editor.apply();
-
-							apiListener.onAccessTokenCame();
-						}
-					});
-
-					view.loadUrl("javascript:" +
-							"document.getElementsByName('email')[0].value='" + USER_NAME + "';" +
-							"document.getElementsByName('pass')[0].value='" + USER_PASSWORD +
-							"';" +
-							"document.forms[0].submit();");
-				}
-			});
-
-			webView.loadUrl(url);
-		}
-		else {
+	private void initialize(Context context) {
+		if (preferences.getLong(EXPIRES_IN, 0) > System.currentTimeMillis() / 1000) {
+			accessToken = preferences.getString(ACCESS_TOKEN, null);
 			apiListener.onAccessTokenCame();
+			return;
 		}
+
+		final Map<String, String> params = new HashMap<>();
+		params.put("client_id", CLIENT_ID);
+		params.put("response_type", "token");
+		params.put("scope", "audio");
+
+		final String url = APIHelper.buildUrl("https://oauth.vk.com/authorize", params);
+
+		final WebView webView = new WebView(context);
+		webView.getSettings().setJavaScriptEnabled(true);
+		CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
+
+		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				view.setWebViewClient(new WebViewClient() {
+					@Override
+					public void onPageFinished(WebView view, String url) {
+						prepareAuthorizeUrl(url);
+						apiListener.onAccessTokenCame();
+					}
+				});
+
+				view.loadUrl(FILL_FORM_JS);
+			}
+		});
+
+		webView.loadUrl(url);
+	}
+
+	private void prepareAuthorizeUrl(String url) {
+		accessToken = APIHelper.getParameterFromUrl(ACCESS_TOKEN, url);
+		final String expiresString = APIHelper.getParameterFromUrl(EXPIRES_IN, url);
+
+		final long expires_in = System.currentTimeMillis() / 1000 + Long.valueOf(expiresString);
+
+		preferences.edit()
+				.putString(ACCESS_TOKEN, accessToken)
+				.putLong(EXPIRES_IN, expires_in)
+				.apply();
 	}
 
 	public void searchSongs(String query, int performer, int count, int offset) {

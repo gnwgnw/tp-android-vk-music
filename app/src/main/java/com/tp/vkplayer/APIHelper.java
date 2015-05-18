@@ -63,8 +63,8 @@ public class APIHelper {
 		return response.toString();
 	}
 
-	public static String getAccessTokenFromUrl(String url) {
-		Pattern p = Pattern.compile("access_token=([^&]+)");
+	public static String getParameterFromUrl(String param, String url) {
+		Pattern p = Pattern.compile(param + "=([^&]+)");
 		Matcher m = p.matcher(url);
 		m.find();
 		return m.group(1);

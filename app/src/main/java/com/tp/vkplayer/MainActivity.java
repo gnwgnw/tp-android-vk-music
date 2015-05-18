@@ -78,9 +78,6 @@ public class MainActivity extends Activity implements API.APIListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
 
-        API api = new API(this);
-        api.initialize(this);
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int layouts[] = new int[]{ R.layout.layout_search_songs, R.layout.layout_search_artists };
         flipper = (ViewFlipper) findViewById(R.id.mainActivity_flipper_for_search_choice);
@@ -136,12 +133,10 @@ public class MainActivity extends Activity implements API.APIListener {
 
     @Override
     public void onAccessTokenCame() {
-        Toast.makeText(this, "token", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSearchDone(List<SongObject> songs) {
-
     }
 
 

@@ -1,6 +1,8 @@
 package com.tp.vkplayer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,46 +24,67 @@ public class API {
 	private final String USER_NAME = "+79153891621";
 	private final String USER_PASSWORD = "MilyaMilya";
 	private final String CLIENT_ID = "4917967";
+	private final String SP_ACCESS_TOKEN = "access_token";
 
 	private final APIListener apiListener;
-	private String accessToken;
+	private final Activity activity;
 
-	public API(APIListener apiListener) {
+	private String accessToken = null;
+
+	public API(Activity activity, APIListener apiListener) {
 		this.apiListener = apiListener;
+		this.activity = activity;
+
 		//TODO add token to DB
+		SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
+		accessToken = preferences.getString(SP_ACCESS_TOKEN, null);
 	}
 
+	//TODO make private, move to constructor
 	public void initialize(Context context) {
-		final Map<String, String> params = new HashMap<>();
-		params.put("client_id", CLIENT_ID);
-		params.put("response_type", "token");
-		params.put("scope", "audio");
+		if (accessToken == null) {
+			final Map<String, String> params = new HashMap<>();
+			params.put("client_id", CLIENT_ID);
+			params.put("response_type", "token");
+			params.put("scope", "audio");
 
-		final String url = APIHelper.buildUrl("https://oauth.vk.com/authorize", params);
+			final String url = APIHelper.buildUrl("https://oauth.vk.com/authorize", params);
 
-		WebView webView = new WebView(context);
-		webView.getSettings().setJavaScriptEnabled(true);
-		CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
+			WebView webView = new WebView(context);
+			webView.getSettings().setJavaScriptEnabled(true);
+			CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
 
-		webView.setWebViewClient(new WebViewClient() {
-			@Override
-			public void onPageFinished(WebView view, String url) {
-				view.setWebViewClient(new WebViewClient() {
-					@Override
-					public void onPageFinished(WebView view, String url) {
-						accessToken = APIHelper.getAccessTokenFromUrl(url);
-						apiListener.onAccessTokenCame();
-					}
-				});
+			webView.setWebViewClient(new WebViewClient() {
+				@Override
+				public void onPageFinished(WebView view, String url) {
+					view.setWebViewClient(new WebViewClient() {
+						@Override
+						public void onPageFinished(WebView view, String url) {
+							accessToken = APIHelper.getAccessTokenFromUrl(url);
 
-				view.loadUrl("javascript:" +
-						"document.getElementsByName('email')[0].value='" + USER_NAME + "';" +
-						"document.getElementsByName('pass')[0].value='" + USER_PASSWORD + "';" +
-						"document.forms[0].submit();");
-			}
-		});
+							SharedPreferences preferences =
+									activity.getPreferences(Context.MODE_PRIVATE);
+							SharedPreferences.Editor editor = preferences.edit();
+							editor.putString(SP_ACCESS_TOKEN, accessToken);
+							editor.apply();
 
-		webView.loadUrl(url);
+							apiListener.onAccessTokenCame();
+						}
+					});
+
+					view.loadUrl("javascript:" +
+							"document.getElementsByName('email')[0].value='" + USER_NAME + "';" +
+							"document.getElementsByName('pass')[0].value='" + USER_PASSWORD +
+							"';" +
+							"document.forms[0].submit();");
+				}
+			});
+
+			webView.loadUrl(url);
+		}
+		else {
+			apiListener.onAccessTokenCame();
+		}
 	}
 
 	public void searchSongs(String query, int performer, int count, int offset) {

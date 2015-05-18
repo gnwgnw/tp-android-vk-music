@@ -1,95 +1,172 @@
 package com.tp.vkplayer;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
-import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by S.Grechkin-Pogrebnyakov on 17.05.2015.
  */
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
- */
-public class PlayMusicService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.tp.vkplayer.action.FOO";
-    private static final String ACTION_BAZ = "com.tp.vkplayer.action.BAZ";
+public class PlayMusicService extends Service implements
+        MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnCompletionListener {
 
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.tp.vkplayer.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.tp.vkplayer.extra.PARAM2";
+    private MediaPlayer mediaPlayer;
+    private boolean isPlay;
+    private ArrayList<SongObject> songs;
+    private int currentSongPos;
+    private int repeatMode;
+    private boolean randomPlay;
 
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, PlayMusicService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
+    static public final int DO_NOT_REPEAT = 0;
+    static public final int REPEAT_ALL = 1;
+    static public final int REPEAT_ONE = 2;
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, PlayMusicService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
 
-    public PlayMusicService() {
-        super("PlayMusicService");
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        currentSongPos = 0;
+        isPlay = false;
+        mediaPlayer = new MediaPlayer();
+        initMusicPlayer();
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public int onStartCommand( Intent intent, int flags, int startId ) {
         if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
-            }
+            randomPlay = intent.getBooleanExtra("randomPlay", false);
+            repeatMode = intent.getIntExtra("repeatMode", 0);
+        }
+        return START_STICKY;
+    }
+
+    public void initMusicPlayer() {
+        //set player props
+        mediaPlayer.setWakeMode(getApplicationContext(),
+                PowerManager.PARTIAL_WAKE_LOCK);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnPreparedListener(this);
+        mediaPlayer.setOnErrorListener(this);
+        mediaPlayer.setOnCompletionListener(this);
+    }
+
+    public void setSongs( ArrayList<SongObject> songs ) {
+        this.songs = songs;
+    }
+
+    public class MusicBinder extends Binder {
+        PlayMusicService getService() {
+            return PlayMusicService.this;
         }
     }
 
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+    private final IBinder musicBind = new MusicBinder();
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return musicBind;
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
+    @Override
+    public boolean onUnbind( Intent intent ) {
+       // mediaPlayer.stop();
+        return false;
     }
+
+    public void playSong() {
+        mediaPlayer.reset();
+        SongObject song = songs.get(currentSongPos);
+        try{
+            mediaPlayer.setDataSource(song.getUrl());
+        } catch (Exception e) {
+            Log.e("ACHTUNG!!!", "Error setting data source", e);
+        }
+        mediaPlayer.prepareAsync();
+    }
+
+    public void setSong( int id ) {
+        currentSongPos = id;
+    }
+
+    public int getPosition(){
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    public int getDuration(){
+        return mediaPlayer.getDuration();
+    }
+
+    public boolean isPlaying(){
+        return mediaPlayer.isPlaying();
+    }
+
+    public void pausePlayer(){
+        mediaPlayer.pause();
+    }
+
+    public void seek(int position){
+        mediaPlayer.seekTo(position);
+    }
+
+    public void resumePlayer(){
+        mediaPlayer.start();
+    }
+
+    public void playPrev(){
+        if ( repeatMode == REPEAT_ONE ) {
+            playSong();
+            return;
+        }
+
+        currentSongPos--;
+        if(currentSongPos < 0) {
+            switch (repeatMode) {
+                case DO_NOT_REPEAT:
+                    currentSongPos = 0;
+                case  REPEAT_ALL:
+                    currentSongPos = songs.size() - 1;
+            }
+        }
+        playSong();
+    }
+
+    public void playNext(){
+        currentSongPos++;
+        if(currentSongPos >= songs.size()) currentSongPos=0;
+        playSong();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        Log.e("Player", "Completed");
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        return false;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        isPlay = true;
+        mp.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        if(isPlay)
+            mediaPlayer.stop();
+        mediaPlayer.release();
+
+    }
+
 }

@@ -49,10 +49,7 @@ public class API {
 				view.setWebViewClient(new WebViewClient() {
 					@Override
 					public void onPageFinished(WebView view, String url) {
-						Pattern p = Pattern.compile("access_token=([^&]+)");
-						Matcher m = p.matcher(url);
-						m.find();
-						accessToken = m.group(1);
+						accessToken = APIHelper.getAccessTokenFromUrl(url);
 						apiListener.onAccessTokenCame();
 					}
 				});

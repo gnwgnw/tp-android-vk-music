@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * author s.titaevskiy on 14.05.15.
@@ -67,5 +69,12 @@ public class APIHelper {
 		}
 
 		return response.toString();
+	}
+
+	public static String getAccessTokenFromUrl(String url) {
+		Pattern p = Pattern.compile("access_token=([^&]+)");
+		Matcher m = p.matcher(url);
+		m.find();
+		return m.group(1);
 	}
 }

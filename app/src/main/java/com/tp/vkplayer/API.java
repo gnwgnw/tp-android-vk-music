@@ -1,6 +1,7 @@
 package com.tp.vkplayer;
 
 import android.content.Context;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -12,16 +13,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * author s.titaevskiy on 16.05.15.
  */
 public class API {
 
-	private final String USER_NAME = "";
-	private final String USER_PASSWORD = "";
+	private final String USER_NAME = "+79153891621";
+	private final String USER_PASSWORD = "MilyaMilya";
 	private final String CLIENT_ID = "4917967";
 
 	private final APIListener apiListener;
@@ -32,7 +31,7 @@ public class API {
 		//TODO add token to DB
 	}
 
-	public String initialize(Context context) {
+	public void initialize(Context context) {
 		final Map<String, String> params = new HashMap<>();
 		params.put("client_id", CLIENT_ID);
 		params.put("response_type", "token");
@@ -42,6 +41,7 @@ public class API {
 
 		WebView webView = new WebView(context);
 		webView.getSettings().setJavaScriptEnabled(true);
+		CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
 
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -65,7 +65,6 @@ public class API {
 		});
 
 		webView.loadUrl(url);
-		return webView.getUrl();
 	}
 
 	public void searchSongs(String query, int performer, int count, int offset) {

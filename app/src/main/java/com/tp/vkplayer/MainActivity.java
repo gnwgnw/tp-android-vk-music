@@ -11,13 +11,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
+
+import java.util.List;
 
 /**
  * Created by Mily-V on 10.05.2015.
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements API.APIListener {
 
     private static ViewFlipper flipper;
     private static final String TAG = "MainActivity";
@@ -75,6 +78,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
 
+        API api = new API(this);
+        api.initialize(this);
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int layouts[] = new int[]{ R.layout.layout_search_songs, R.layout.layout_search_artists };
         flipper = (ViewFlipper) findViewById(R.id.mainActivity_flipper_for_search_choice);
@@ -126,6 +132,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onAccessTokenCame() {
+        Toast.makeText(this, "token", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSearchDone(List<SongObject> songs) {
+
     }
 
 

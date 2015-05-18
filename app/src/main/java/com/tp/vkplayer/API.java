@@ -39,11 +39,9 @@ public class API {
 	public API(Activity activity, APIListener apiListener) {
 		this.apiListener = apiListener;
 		preferences = activity.getPreferences(Context.MODE_PRIVATE);
-
-		initialize(activity);
 	}
 
-	private void initialize(Context context) {
+	public void initialize(Activity activity) {
 		if (preferences.getLong(EXPIRES_IN, 0) > System.currentTimeMillis() / 1000) {
 			accessToken = preferences.getString(ACCESS_TOKEN, null);
 			apiListener.onAccessTokenCame();
@@ -57,7 +55,7 @@ public class API {
 
 		final String url = APIHelper.buildUrl("https://oauth.vk.com/authorize", params);
 
-		final WebView webView = new WebView(context);
+		final WebView webView = new WebView(activity);
 		webView.getSettings().setJavaScriptEnabled(true);
 		CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
 

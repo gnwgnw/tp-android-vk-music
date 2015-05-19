@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainActivity_layout_main"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background ="@drawable/main_background"
+<RelativeLayout android:id="@+id/mainActivity_layout_main"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/main_background"
     >
 
     <SearchView
+        android:id="@+id/main_activity_search_view"
+        style="@style/MainActivity_style_searchView"
         android:layout_width="fill_parent"
         android:layout_height="120dp"
-        android:id="@+id/mainActivity_edittext_to_input"
-        style="@style/MainActivity_style_searchView"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:textSize="28sp"
         />
 
     <ViewFlipper
+        android:id="@+id/mainActivity_flipper_for_search_choice"
         android:layout_width="fill_parent"
         android:layout_height="180dp"
-        android:id="@+id/mainActivity_flipper_for_search_choice"
-        android:layout_below="@id/mainActivity_edittext_to_input"
+        android:layout_below="@id/main_activity_search_view"
         />
 
     <ImageButton
+        android:id="@+id/mainActivity_button_to_start_search"
         android:layout_width="220dp"
         android:layout_height="220dp"
-        android:id="@+id/mainActivity_button_to_start_search"
-        android:background="@android:color/transparent"
-        android:src="@drawable/mainactivity_image_button"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/mainActivity_text_for_start_search"
+        android:scaleType="fitCenter"
+        android:src="@drawable/main_activity_image_button"
         />
 
 

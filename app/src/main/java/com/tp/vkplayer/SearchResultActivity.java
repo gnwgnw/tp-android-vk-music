@@ -18,11 +18,13 @@ import java.util.List;
  */
 public class SearchResultActivity extends ActionBarActivity implements API.APIListener {
 
+	private final int MAX_SEARCH = 50;
 	private final List<SongObject> songs = new LinkedList<>();
 
 	private API api;
 	private Toolbar toolbar;
 	private SongArrayAdapter adapter;
+	private String query;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 		ListView listView = (ListView) findViewById(R.id.search_result_list_view);
 		listView.setAdapter(adapter);
 		//TODO set listView clickListener
+
+		query = getIntent().getExtras().getString(MainActivity.QUERY);
 
 		api = new API(this, this);
 		api.initialize();
@@ -65,7 +69,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 	@Override
 	public void onAccessTokenCame() {
 		Log.i("TOKEN", "Token");
-		api.searchSongs("Kiss", 1, 17, 0);
+		api.searchSongs(query, 0, MAX_SEARCH, 0);
 	}
 
 	@Override

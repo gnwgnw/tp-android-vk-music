@@ -8,10 +8,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import java.util.List;
@@ -22,129 +21,117 @@ import java.util.List;
 
 public class MainActivity extends Activity implements API.APIListener {
 
-    private static ViewFlipper flipper;
-    private static final String TAG = "MainActivity";
-    private static float fromPosition = 0;
-    private static float toPosition = 0;
+	public static final String QUERY = "query";
 
-    // выбран ли поиск по названию песни
-    public boolean isSearchSongs() {
-        TextView searchSongs = (TextView) findViewById(R.id.mainActivity_textview_for_search_songs);
-        if ( searchSongs.getVisibility() == View.VISIBLE)
-            return true;
-        else return false;
-    }
+	private static final String TAG = "MainActivity";
+	private static ViewFlipper flipper;
+	private static float fromPosition = 0;
+	private static float toPosition = 0;
 
-    // выбран ли поиск по Имени исполнителя
-    public boolean isSearchArtists() {
-        TextView searchArtists = (TextView) findViewById(R.id.mainActivity_textview_for_search_artists);
-        if ( searchArtists.getVisibility() == View.VISIBLE)
-            return true;
-        else return false;
-    }
+	// выбран ли поиск по названию песни
+	public boolean isSearchSongs() {
+		TextView searchSongs =
+				(TextView) findViewById(R.id.mainActivity_textview_for_search_songs);
+		if (searchSongs.getVisibility() == View.VISIBLE)
+			return true;
+		else return false;
+	}
 
-    protected boolean onTouchHandler(View v, MotionEvent event) {
-        int MOVE_LENGTH = 100;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                fromPosition = event.getX();
-                break;
-            case MotionEvent.ACTION_UP:
-                toPosition = event.getX();
-                if ((fromPosition - MOVE_LENGTH) > toPosition)
-                {
-                    flipper.setInAnimation(AnimationUtils.loadAnimation(v.getContext(),
-                            R.anim.go_next_in));
-                    flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(),
-                            R.anim.go_next_out));
-                    flipper.showNext();
-                }
-                else if ((fromPosition + MOVE_LENGTH) < toPosition)
-                {
-                    flipper.setInAnimation(AnimationUtils.loadAnimation(v.getContext(),
-                            R.anim.go_prev_in));
-                    flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(),
-                            R.anim.go_prev_out));
-                    flipper.showPrevious();
-                }
-            default:
-                break;
-        }
-        return true;
-    }
+	// выбран ли поиск по Имени исполнителя
+	public boolean isSearchArtists() {
+		TextView searchArtists =
+				(TextView) findViewById(R.id.mainActivity_textview_for_search_artists);
+		if (searchArtists.getVisibility() == View.VISIBLE)
+			return true;
+		else return false;
+	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_main);
+	protected boolean onTouchHandler(View v, MotionEvent event) {
+		int MOVE_LENGTH = 100;
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				fromPosition = event.getX();
+				break;
+			case MotionEvent.ACTION_UP:
+				toPosition = event.getX();
+				if ((fromPosition - MOVE_LENGTH) > toPosition) {
+					flipper.setInAnimation(AnimationUtils.loadAnimation(v.getContext(),
+							R.anim.go_next_in));
+					flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(),
+							R.anim.go_next_out));
+					flipper.showNext();
+				}
+				else if ((fromPosition + MOVE_LENGTH) < toPosition) {
+					flipper.setInAnimation(AnimationUtils.loadAnimation(v.getContext(),
+							R.anim.go_prev_in));
+					flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(),
+							R.anim.go_prev_out));
+					flipper.showPrevious();
+				}
+			default:
+				break;
+		}
+		return true;
+	}
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        int layouts[] = new int[]{ R.layout.layout_search_songs, R.layout.layout_search_artists };
-        flipper = (ViewFlipper) findViewById(R.id.mainActivity_flipper_for_search_choice);
-        for (int layout : layouts)
-            flipper.addView(inflater.inflate(layout, null));
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.layout_main);
 
-        TextView searchSongs = (TextView) findViewById(R.id.mainActivity_textview_for_search_songs);
-        searchSongs.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return onTouchHandler(v, event);
-            }
-        });
+		LayoutInflater inflater =
+				(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		int layouts[] = new int[]{R.layout.layout_search_songs, R.layout.layout_search_artists};
+		flipper = (ViewFlipper) findViewById(R.id.mainActivity_flipper_for_search_choice);
+		for (int layout : layouts)
+			flipper.addView(inflater.inflate(layout, null));
 
-        TextView searchArtists = (TextView) findViewById(R.id.mainActivity_textview_for_search_artists);
-        searchArtists.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return onTouchHandler(v, event);
-            }
-        });
+		TextView searchSongs =
+				(TextView) findViewById(R.id.mainActivity_textview_for_search_songs);
+		searchSongs.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return onTouchHandler(v, event);
+			}
+		});
 
-        final ImageButton startSearch = (ImageButton) findViewById(R.id.mainActivity_button_to_start_search);
-        startSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, SearchResultActivity.class);
-             //   Intent i = new Intent(MainActivity.this, PlayControlActivity.class);
-                startActivity(i);
-            }
-        });
+		TextView searchArtists =
+				(TextView) findViewById(R.id.mainActivity_textview_for_search_artists);
+		searchArtists.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return onTouchHandler(v, event);
+			}
+		});
 
-    }
+		final ImageButton startSearch =
+				(ImageButton) findViewById(R.id.mainActivity_button_to_start_search);
+		startSearch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//   Intent i = new Intent(MainActivity.this, PlayControlActivity.class);
+				Intent i = new Intent(MainActivity.this, SearchResultActivity.class);
+				SearchView searchView = (SearchView) findViewById(R.id.main_activity_search_view);
+				i.putExtra(QUERY, searchView.getQuery().toString());
+				startActivity(i);
+			}
+		});
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+	}
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+	@Override
+	public void onAccessTokenCame() {
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onAccessTokenCame() {
-    }
-
-    @Override
-    public void onSearchDone(List<SongObject> songs) {
-    }
+	@Override
+	public void onSearchDone(List<SongObject> songs) {
+	}
 
 
-    //@Override
-    //public boolean onCreateOptionsMenu(Menu menu) {    }
+	//@Override
+	//public boolean onCreateOptionsMenu(Menu menu) {    }
 
-    //@Override
-    //public boolean onOptionsItemSelected(MenuItem item){     }
+	//@Override
+	//public boolean onOptionsItemSelected(MenuItem item){     }
 
 }

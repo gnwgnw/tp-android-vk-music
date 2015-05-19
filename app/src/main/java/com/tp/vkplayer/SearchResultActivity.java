@@ -32,9 +32,6 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 
-		toolbar = (Toolbar) findViewById(R.id.search_result_tool_bar);
-		setSupportActionBar(toolbar);
-
 		adapter = new SongArrayAdapter(this, songs);
 
 		ListView listView = (ListView) findViewById(R.id.search_result_list_view);

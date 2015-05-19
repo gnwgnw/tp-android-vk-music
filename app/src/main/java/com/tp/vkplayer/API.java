@@ -31,17 +31,19 @@ public class API {
 			"document.getElementsByName('pass')[0].value='" + USER_PASSWORD + "';" +
 			"document.forms[0].submit();";
 
+	private final Activity activity;
 	private final APIListener apiListener;
 	private final SharedPreferences preferences;
 
 	private String accessToken = null;
 
 	public API(Activity activity, APIListener apiListener) {
+		this.activity = activity;
 		this.apiListener = apiListener;
-		preferences = activity.getPreferences(Context.MODE_PRIVATE);
+		this.preferences = activity.getPreferences(Context.MODE_PRIVATE);
 	}
 
-	public void initialize(Activity activity) {
+	public void initialize() {
 		if (preferences.getLong(EXPIRES_IN, 0) > System.currentTimeMillis() / 1000) {
 			accessToken = preferences.getString(ACCESS_TOKEN, null);
 			apiListener.onAccessTokenCame();
@@ -128,6 +130,7 @@ public class API {
 		return songs;
 	}
 
+	//TODO slice listener
 	public interface APIListener {
 		void onAccessTokenCame();
 

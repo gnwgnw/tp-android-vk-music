@@ -2,16 +2,14 @@
 <resources>
 
     <string name="app_name">VK Player</string>
-    <string name="mainActivity_text_search_songs">Поиск песни</string>
-    <string name="mainActivity_text_search_artists">Поиск артиста</string>
-    <string name="mainActivity_text_for_search_input">Поиск</string>
-    <string name="mainActivity_text_for_start_search">GO!</string>
-    <string name="action_item_1">Item 1</string>
-    <string name="action_item_2">Item 2</string>
-    <string name="action_item_3">Item 3</string>
+    <string name="text_search_songs">Поиск песни</string>
+    <string name="text_search_artists">Поиск артиста</string>
+    <string name="text_for_search_input">Поиск</string>
+    <string name="text_for_start_search">GO!</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="title_activity_play_control">PlayControlActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="text_nothing_find">Ничего не нашли</string>
+    <string name="text_count_result">Всего: </string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.tp.vkplayer;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -31,7 +32,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 
-		toolbar = (Toolbar) findViewById(R.id.searchResult_tool_bar);
+		toolbar = (Toolbar) findViewById(R.id.search_result_tool_bar);
 		setSupportActionBar(toolbar);
 
 		adapter = new SongArrayAdapter(this, songs);
@@ -46,25 +47,20 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 		api.initialize();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-		MenuItem searchItem = menu.findItem(R.id.tool_bar_action_search);
-		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-		searchView.setQueryHint("Изменить поиск");
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.tool_bar_action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 	@Override
 	public void onAccessTokenCame() {

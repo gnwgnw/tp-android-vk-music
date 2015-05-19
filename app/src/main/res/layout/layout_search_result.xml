@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#efefef"
-              android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef"
     >
 
     <include
-        android:id="@+id/searchResult_tool_bar"
+        android:id="@+id/search_result_tool_bar"
         layout="@layout/layout_tool_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        />
+
+    <TextView
+        android:id="@+id/search_result_textview_no_found"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_tool_bar"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#000000"
+        android:paddingRight="5dp"
+        style="@style/style_primary_text"
+        android:text="@string/text_nothing_find"
+        android:textSize="24sp"
+        android:visibility="visible"
         />
 
     <ListView
         android:id="@+id/search_result_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_tool_bar"
+        android:background="@color/color_list_background"
+        android:visibility="invisible"
         />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/search_result_count_result"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/text_count_result"
+        style="@style/style_option_text"
+        android:gravity="right"
+        android:textSize="20sp"
+        android:background="@color/color_primary"
+        />
+
+</RelativeLayout>

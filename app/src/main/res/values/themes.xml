@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="windowActionBar">false</item>
-        <item name="searchViewStyle">@style/MainActivity_style_searchView</item>
+        <item name="searchViewStyle">@style/style_searchView</item>
+        <item name="android:progressBarStyle">@style/style_progressBar</item>
     </style>
+
 </resources>

@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import java.util.LinkedList;
@@ -23,7 +24,6 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 	private final List<SongObject> songs = new LinkedList<>();
 
 	private API api;
-	private Toolbar toolbar;
 	private SongArrayAdapter adapter;
 	private String query;
 
@@ -31,9 +31,6 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
-
-		toolbar = (Toolbar) findViewById(R.id.search_result_tool_bar);
-		setSupportActionBar(toolbar);
 
 		adapter = new SongArrayAdapter(this, songs);
 
@@ -73,5 +70,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 		Log.i("SEARCH", songs.toString());
 		this.songs.addAll(songs);
 		adapter.notifyDataSetChanged();
+		findViewById(R.id.search_result_list_view).setVisibility(View.VISIBLE);
+		findViewById(R.id.search_result_textview_no_found).setVisibility(View.GONE);
 	}
 }

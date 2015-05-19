@@ -82,4 +82,23 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/play_control_song_name"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/songAlbum"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/play_control_artist"
+        android:layout_below="@+id/play_control_song_name"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

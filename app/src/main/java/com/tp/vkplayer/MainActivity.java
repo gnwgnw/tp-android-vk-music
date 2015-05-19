@@ -67,8 +67,7 @@ public class MainActivity extends Activity implements API.APIListener {
 					flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(),
 							R.anim.go_next_out));
 					flipper.showNext();
-				}
-				else if ((fromPosition + MOVE_LENGTH) < toPosition) {
+				} else if ((fromPosition + MOVE_LENGTH) < toPosition) {
 					flipper.setInAnimation(AnimationUtils.loadAnimation(v.getContext(),
 							R.anim.go_prev_in));
 					flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(),
@@ -90,8 +89,7 @@ public class MainActivity extends Activity implements API.APIListener {
 		new AsyncTaskExample().execute();
 
 
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context
-				.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		int layouts[] = new int[]{R.layout.layout_search_songs, R.layout.layout_search_artists};
 		flipper = (ViewFlipper) findViewById(R.id.main_activity_flipper_search_choice);
 		for (int layout : layouts)
@@ -105,8 +103,7 @@ public class MainActivity extends Activity implements API.APIListener {
 			}
 		});
 
-		TextView searchArtists = (TextView) findViewById(R.id
-                .main_activity_textview_search_artists);
+		TextView searchArtists = (TextView) findViewById(R.id.main_activity_textview_search_artists);
 		searchArtists.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -118,11 +115,10 @@ public class MainActivity extends Activity implements API.APIListener {
 		startSearch.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//   Intent i = new Intent(MainActivity.this,
-				// PlayControlActivity.class);
+
+				//   Intent i = new Intent(MainActivity.this, PlayControlActivity.class);
 				Intent i = new Intent(MainActivity.this, SearchResultActivity.class);
-				SearchView searchView =
-						(SearchView) findViewById(R.id.main_activity_edittext_input);
+				SearchView searchView = (SearchView) findViewById(R.id.main_activity_edittext_input);
 				i.putExtra(QUERY, searchView.getQuery().toString());
 				startActivity(i);
 			}
@@ -161,8 +157,8 @@ public class MainActivity extends Activity implements API.APIListener {
 			for (int i = 0; i < 2; i++) {
 				try {
 					TimeUnit.SECONDS.sleep(2);
-				}
-				catch (InterruptedException e) {
+
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}

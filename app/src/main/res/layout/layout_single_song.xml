@@ -11,7 +11,7 @@
         android:paddingTop="7dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        style="@style/style_primary_text"
+        android:textColor="@color/color_primary_text"
         android:textSize="20sp"
         android:textStyle="bold"
         />
@@ -24,7 +24,7 @@
         android:paddingTop="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        style="@style/style_primary_text"
         android:textSize="13sp"
+        android:textColor="@color/color_primary_text"
         />
 </RelativeLayout>

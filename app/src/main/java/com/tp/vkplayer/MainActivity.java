@@ -36,21 +36,12 @@ public class MainActivity extends Activity implements API.APIListener {
 	private static float toPosition = 0;
 
 	// выбран ли поиск по названию песни
-	public boolean isSearchSongs() {
-		TextView searchSongs =
-				(TextView) findViewById(R.id.main_activity_textview_search_songs);
-		return searchSongs.getVisibility() == View.VISIBLE;
-	}
-
-	// выбран ли поиск по Имени исполнителя
-	public boolean isSearchArtists() {
-		TextView searchArtists =
-				(TextView) findViewById(R.id.main_activity_textview_search_artists);
-		return searchArtists.getVisibility() == View.VISIBLE;
+	public int getSearchMode() {
+		return flipper.getDisplayedChild();
 	}
 
 	protected boolean onTouchHandler(View v, MotionEvent event) {
-		int MOVE_LENGTH = 100;
+		final int MOVE_LENGTH = 100;
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				fromPosition = event.getX();
@@ -83,7 +74,6 @@ public class MainActivity extends Activity implements API.APIListener {
 		setContentView(R.layout.layout_main);
 
 		new AsyncTaskExample().execute();
-
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context
 				.LAYOUT_INFLATER_SERVICE);
@@ -119,7 +109,7 @@ public class MainActivity extends Activity implements API.APIListener {
 				CustomSearchView searchView = (CustomSearchView)
 						findViewById(R.id.main_activity_edittext_input);
 				i.putExtra(QUERY, searchView.getQuery());
-				i.putExtra(PERFORMER, isSearchSongs() ? 0 : 1);
+				i.putExtra(PERFORMER, getSearchMode());
 				startActivity(i);
 			}
 		});

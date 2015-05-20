@@ -31,11 +31,6 @@ public class CustomSearchView extends LinearLayout {
 
 	public CustomSearchView (Context context, AttributeSet attrs) {
 		super(context, attrs);
-		if (attrs != null) {
-			TypedArray a = context.obtainStyledAttributes(attrs,
-					R.styleable.CustomSearchView, 0, 0);
-			a.recycle();
-		}
 
 		setOrientation(LinearLayout.HORIZONTAL);
 		setGravity(Gravity.CENTER_VERTICAL);

@@ -35,6 +35,7 @@
         android:layout_below="@id/search_result_tool_bar"
         android:background="@color/color_list_background"
         android:visibility="invisible"
+        android:layout_above="@+id/search_result_now_playing"
         />
 
     <com.tp.vkplayer.widgets.CustomNowPlayingSong

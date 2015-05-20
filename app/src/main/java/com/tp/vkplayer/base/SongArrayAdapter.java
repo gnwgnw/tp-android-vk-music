@@ -1,4 +1,4 @@
-package com.tp.vkplayer;
+package com.tp.vkplayer.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.tp.vkplayer.R;
+import com.tp.vkplayer.base.SongObject;
 
 import java.util.List;
 

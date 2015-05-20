@@ -1,9 +1,6 @@
 package com.tp.vkplayer;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,8 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-import com.tp.vkplayer.widgets.CustomSearchView;
-import com.tp.vkplayer.widgets.CustomToolBar;
+import com.tp.vkplayer.api.API;
+import com.tp.vkplayer.base.SongArrayAdapter;
+import com.tp.vkplayer.base.SongObject;
 
 import java.util.LinkedList;
 import java.util.List;

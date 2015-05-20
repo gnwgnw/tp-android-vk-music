@@ -8,10 +8,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.tp.vkplayer.base.SongObject;
 
 import java.util.ArrayList;
 import java.util.Random;

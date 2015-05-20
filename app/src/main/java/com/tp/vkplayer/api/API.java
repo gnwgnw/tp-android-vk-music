@@ -1,4 +1,4 @@
-package com.tp.vkplayer;
+package com.tp.vkplayer.api;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.net.http.SslError;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.tp.vkplayer.base.SongObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;

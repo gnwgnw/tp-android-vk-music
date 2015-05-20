@@ -8,16 +8,14 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
-import android.os.SystemClock;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tp.vkplayer.base.SongObject;
 
 import java.util.ArrayList;
 

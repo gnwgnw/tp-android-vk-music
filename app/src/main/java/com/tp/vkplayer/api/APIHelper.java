@@ -1,4 +1,4 @@
-package com.tp.vkplayer;
+package com.tp.vkplayer.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.tp.vkplayer.api.API;
+import com.tp.vkplayer.base.SongObject;
 import com.tp.vkplayer.widgets.CustomSearchView;
 
 import java.util.List;

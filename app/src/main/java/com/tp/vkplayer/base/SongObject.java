@@ -1,4 +1,4 @@
-package com.tp.vkplayer;
+package com.tp.vkplayer.base;
 
 import org.json.JSONException;
 import org.json.JSONObject;

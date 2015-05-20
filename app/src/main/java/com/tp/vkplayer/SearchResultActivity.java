@@ -55,21 +55,6 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 //		});
 	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 	@Override
 	public void onAccessTokenCame() {
 		Log.i("TOKEN", "Token");
@@ -78,7 +63,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 
 	@Override
 	public void onSearchDone(List<SongObject> songs) {
-		Log.i("SEARCH", songs.toString());
+		Log.e("SEARCH", songs.toString());
 		this.songs.addAll(songs);
 		adapter.notifyDataSetChanged();
 		findViewById(R.id.search_result_list_view).setVisibility(View.VISIBLE);

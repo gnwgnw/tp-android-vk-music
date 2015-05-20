@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements API.APIListener {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, SearchResultActivity.class);
-                //   Intent i = new Intent(MainActivity.this, PlayControlActivity.class);
+//                Intent i = new Intent(MainActivity.this, PlayControlActivity.class);
                 startActivity(i);
             }
         });

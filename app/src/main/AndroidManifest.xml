@@ -38,7 +38,8 @@
 
         <activity
             android:name=".PlayControlActivity"
-            android:label="@string/title_activity_play_control" >
+            android:label="@string/title_activity_play_control"
+            android:screenOrientation="portrait">
         </activity>
 
     </application>

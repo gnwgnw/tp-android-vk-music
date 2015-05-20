@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by S.Grechkin-Pogrebnyakov on 17.05.2015.
@@ -23,22 +24,28 @@ public class PlayMusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener {
 
+    static public enum RepeatMode{
+        DO_NOT_REPEAT,
+        REPEAT_ALL,
+        REPEAT_ONE
+    }
+
     private MediaPlayer mediaPlayer;
-    private boolean isPlay;
+    public boolean isPlay;
     private ArrayList<SongObject> songs;
+    private SongObject currSong;
     private int currentSongPos;
-    private int repeatMode;
+    private RepeatMode repeatMode = RepeatMode.DO_NOT_REPEAT;
     private boolean randomPlay;
     private int bufferPosition;
-
-    static public final int DO_NOT_REPEAT = 0;
-    static public final int REPEAT_ALL = 1;
-    static public final int REPEAT_ONE = 2;
+    private boolean loaded;
+    private Random rand;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        rand=new Random();
         currentSongPos = 0;
         bufferPosition = 0;
         isPlay = false;
@@ -48,10 +55,6 @@ public class PlayMusicService extends Service implements
 
     @Override
     public int onStartCommand( Intent intent, int flags, int startId ) {
-        if (intent != null) {
-            randomPlay = intent.getBooleanExtra("randomPlay", false);
-            repeatMode = intent.getIntExtra("repeatMode", 0);
-        }
         return START_STICKY;
     }
 
@@ -70,13 +73,24 @@ public class PlayMusicService extends Service implements
         this.songs = songs;
     }
 
-    @Override
-    public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        bufferPosition = percent * mp.getDuration() / 100;
-    }
-
     public int getBufferPosition() {
         return bufferPosition;
+    }
+
+    public void setRepeatMode( RepeatMode mode ) {
+        repeatMode = mode;
+    }
+
+    public RepeatMode getRepeatMode() {
+        return repeatMode;
+    }
+
+    public void setRandomPlay( boolean randomPlay ) {
+        this.randomPlay = randomPlay;
+    }
+
+    public boolean isRandomPlay() {
+        return randomPlay;
     }
 
     public class MusicBinder extends Binder {
@@ -92,21 +106,20 @@ public class PlayMusicService extends Service implements
         return musicBind;
     }
 
-    @Override
-    public boolean onUnbind( Intent intent ) {
-       // mediaPlayer.stop();
-        return false;
-    }
-
     public void playSong() {
-        mediaPlayer.reset();
-        SongObject song = songs.get(currentSongPos);
+        if ( isPlay ) {
+            resumePlayer();
+            return;
+        }
+        currSong = songs.get(currentSongPos);
         try{
-            mediaPlayer.setDataSource(song.getUrl());
+            mediaPlayer.setDataSource(currSong.getUrl());
         } catch (Exception e) {
             Log.e("ACHTUNG!!!", "Error setting data source", e);
+            return;
         }
         mediaPlayer.prepareAsync();
+
         Intent notIntent = new Intent(this, PlayControlActivity.class);
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendInt = PendingIntent.getActivity(this, 0,
@@ -115,11 +128,11 @@ public class PlayMusicService extends Service implements
         Notification.Builder builder = new Notification.Builder(this);
 
         builder.setContentIntent(pendInt)
-                .setSmallIcon(R.drawable.play_pause_button)
-                .setTicker(song.getTitle())
-                .setOngoing(true)
-                .setContentTitle("Playing")
-        .setContentText(song.getTitle());
+            .setSmallIcon(R.drawable.play_pause_button)
+            .setTicker(currSong.getTitle())
+            .setOngoing(true)
+            .setContentTitle("Playing")
+            .setContentText(currSong.getTitle());
         Notification not = builder.build();
 
         startForeground(42, not);
@@ -129,40 +142,62 @@ public class PlayMusicService extends Service implements
         currentSongPos = id;
     }
 
-    public int getPosition(){
+    public int getPosition() {
         return mediaPlayer.getCurrentPosition();
     }
 
-    public int getDuration(){
+    public int getDuration() {
         return mediaPlayer.getDuration();
     }
 
-    public boolean isPlaying(){
+    public String getSongName() {
+        return currSong.getTitle();
+    }
+
+    public String getSongArtist() {
+        return currSong.getArtist();
+    }
+
+    public boolean isPlaying() {
         return mediaPlayer.isPlaying();
     }
 
-    public void pausePlayer(){
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void pausePlayer() {
         mediaPlayer.pause();
     }
 
-    public void seek(int position){
+    public void seek(int position) {
         mediaPlayer.seekTo(position);
     }
 
-    public void resumePlayer(){
-        if( isPlaying() )
+    public void resumePlayer() {
         mediaPlayer.start();
-        else playSong();
+    }
+
+    private void resetPlay() {
+        mediaPlayer.reset();
+        isPlay = false;
+        bufferPosition = 0;
     }
 
     public void playPrev(){
-        mediaPlayer.reset();
-        if ( repeatMode == REPEAT_ONE ) {
+        resetPlay();
+        if ( repeatMode == RepeatMode.REPEAT_ONE ) {
             playSong();
             return;
         }
-
-        currentSongPos--;
+        if (randomPlay) {
+            int newSong = currentSongPos;
+            while (newSong == currentSongPos) {
+                newSong = rand.nextInt(songs.size());
+            }
+            currentSongPos = newSong;
+        } else
+            currentSongPos--;
         if(currentSongPos < 0) {
             switch (repeatMode) {
                 case DO_NOT_REPEAT:
@@ -176,13 +211,19 @@ public class PlayMusicService extends Service implements
     }
 
     public void playNext(){
-        mediaPlayer.reset();
-        if ( repeatMode == REPEAT_ONE ) {
+        resetPlay();
+        if ( repeatMode == RepeatMode.REPEAT_ONE ) {
             playSong();
             return;
         }
-
-        currentSongPos++;
+        if (randomPlay) {
+            int newSong = currentSongPos;
+            while (newSong == currentSongPos) {
+                newSong = rand.nextInt(songs.size());
+            }
+            currentSongPos = newSong;
+        } else
+            currentSongPos++;
         if(currentSongPos >= songs.size()) {
             switch (repeatMode) {
                 case DO_NOT_REPEAT:
@@ -196,20 +237,35 @@ public class PlayMusicService extends Service implements
     }
 
     @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        bufferPosition = percent * mp.getDuration() / 100;
+        loaded = (percent == 100);
+    }
+
+    @Override
     public void onCompletion(MediaPlayer mp) {
         playNext();
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Toast.makeText(getApplicationContext(), "Error loading file", Toast.LENGTH_SHORT).show();
-        return true;
+       // Toast.makeText(getApplicationContext(), "Error loading file", Toast.LENGTH_SHORT).show();
+        if (what == -38) return true;
+        return false;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         isPlay = true;
-        mp.start();
+        resumePlayer();
+    }
+
+    @Override
+    public boolean onUnbind( Intent intent ) {
+        if( !mediaPlayer.isPlaying() ) {
+            stopForeground(true);
+        }
+        return true;
     }
 
     @Override
@@ -217,7 +273,5 @@ public class PlayMusicService extends Service implements
         if(isPlay)
             mediaPlayer.stop();
         mediaPlayer.release();
-        stopForeground(true);
-
     }
 }

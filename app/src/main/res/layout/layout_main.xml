@@ -6,14 +6,11 @@
     android:background ="@drawable/main_background"
     >
 
-    <SearchView
+    <com.tp.vkplayer.widgets.CustomSearchView
         android:id="@+id/main_activity_edittext_input"
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        style="@style/style_searchView"
-        android:gravity="center"
-        android:textSize="28sp"
         android:visibility="invisible"
         />
 

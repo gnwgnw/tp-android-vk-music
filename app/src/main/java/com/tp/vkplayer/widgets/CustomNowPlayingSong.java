@@ -38,8 +38,8 @@ public class CustomNowPlayingSong extends LinearLayout{
 				.getLayoutInflater()
 				.inflate(R.layout.layout_now_playing_song, this, true);
 
-		title = (TextView) findViewById(R.id.song_title);
-		artist = (TextView) findViewById(R.id.song_artist);
+		title = (TextView) findViewById(R.id.now_playing_song_title);
+		artist = (TextView) findViewById(R.id.now_playing_song_artist);
 		playButton = (ImageButton) findViewById(R.id.now_playing_button_play);
 		layout = (RelativeLayout) findViewById(R.id.layout_now_playing_song);
 

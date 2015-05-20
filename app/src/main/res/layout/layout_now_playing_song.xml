@@ -8,33 +8,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         >
-
-        <TextView
-            android:id="@+id/song_title"
-            style="@style/style_option_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_above="@id/song_artist"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            />
-
-        <TextView
-            android:id="@+id/song_artist"
-            style="@style/style_option_text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_above="@id/now_playing_button_play"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="2dp"
-            android:textSize="18sp"
-            />
         <ImageButton
             android:id="@+id/now_playing_button_play"
             android:layout_width="50dp"
@@ -47,6 +20,36 @@
             android:contentDescription="@string/text_for_start_search"
             android:visibility="visible"
             android:src="@drawable/play_pause_button"/>
+
+        <TextView
+            android:id="@+id/now_playing_song_artist"
+            style="@style/style_option_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@id/now_playing_button_play"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp"
+            android:textSize="18sp"
+            android:text="qwerty"
+            />
+
+
+        <TextView
+            android:id="@+id/now_playing_song_title"
+            style="@style/style_option_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@id/now_playing_song_artist"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="tredsfdgfh"
+            />
 
     </RelativeLayout>
 </merge>

@@ -3,7 +3,8 @@ package com.tp.vkplayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.webkit.CookieManager;
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -61,20 +62,23 @@ public class API {
 
 		final WebView webView = new WebView(activity);
 		webView.getSettings().setJavaScriptEnabled(true);
-		CookieManager.getInstance().setCookie(".vk.com", "remixsid=");
+		webView.getSettings().setDomStorageEnabled(true);
 
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				view.setWebViewClient(new WebViewClient() {
-					@Override
-					public void onPageFinished(WebView view, String url) {
-						prepareAuthorizeUrl(url);
-						apiListener.onAccessTokenCame();
-					}
-				});
+				if (url.contains("authorize")) {
+					view.loadUrl(FILL_FORM_JS);
+				}
+				else if (url.contains(ACCESS_TOKEN)) {
+					prepareAuthorizeUrl(url);
+					apiListener.onAccessTokenCame();
+				}
+			}
 
-				view.loadUrl(FILL_FORM_JS);
+			@Override
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+				handler.proceed();
 			}
 		});
 

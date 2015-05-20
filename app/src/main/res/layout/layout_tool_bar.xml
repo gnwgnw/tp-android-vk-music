@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/color_primary"
-    android:orientation="horizontal"
-    >
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SearchView
-        android:id="@+id/tool_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        style="@style/style_searchView"
-        android:gravity="center"
-        android:textSize="28sp"
+<ImageButton
+    android:id="@+id/search_view_button_start_search"
+    android:layout_width="20dp"
+    android:layout_height="20dp"
+    android:layout_gravity="center"
+    android:layout_marginLeft="20dp"
+    android:background="@android:color/transparent"
+    android:adjustViewBounds="true"
+    android:scaleType="fitCenter"
+    android:contentDescription="@string/text_for_start_search"
+    android:src="@drawable/icon_search"
     />
 
+<EditText
+    android:id="@+id/search_view_edittext"
+    style="@style/style_option_text"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:layout_marginLeft="10dp"
+    android:hint="@string/text_for_search_input"
+    android:textSize="22sp"
+    />
 
-
-</LinearLayout>
+</merge>

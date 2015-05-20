@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/layout_now_playing_song"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+        <ImageButton
+            android:id="@+id/now_playing_button_play"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/text_for_start_search"
+            android:visibility="visible"
+            android:src="@drawable/play_pause_button"/>
+
+        <TextView
+            android:id="@+id/now_playing_song_artist"
+            style="@style/style_option_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@id/now_playing_button_play"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp"
+            android:textSize="14sp"
+            android:text=""
+            />
+        
+        <TextView
+            android:id="@+id/now_playing_song_title"
+            style="@style/style_option_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_above="@id/now_playing_song_artist"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text=""
+            />
+
+
+    </RelativeLayout>
+</merge>

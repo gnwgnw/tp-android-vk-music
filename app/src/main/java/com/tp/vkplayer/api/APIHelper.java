@@ -1,13 +1,15 @@
-package com.tp.vkplayer;
+package com.tp.vkplayer.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * author s.titaevskiy on 14.05.15.
@@ -35,17 +37,9 @@ public class APIHelper {
 	public static String httpRequest(String url) {
 		final StringBuilder response = new StringBuilder();
 		HttpURLConnection connection = null;
-		String encodedUrl = "";
 
 		try {
-			encodedUrl = URLEncoder.encode(url, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			connection = (HttpURLConnection) new URL(encodedUrl).openConnection();
+			connection = (HttpsURLConnection) new URL(url).openConnection();
 			connection.connect();
 
 			BufferedReader reader = new BufferedReader(
@@ -67,5 +61,12 @@ public class APIHelper {
 		}
 
 		return response.toString();
+	}
+
+	public static String getParameterFromUrl(String param, String url) {
+		Pattern p = Pattern.compile(param + "=([^&]+)");
+		Matcher m = p.matcher(url);
+		m.find();
+		return m.group(1);
 	}
 }

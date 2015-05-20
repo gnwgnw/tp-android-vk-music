@@ -1,13 +1,27 @@
 <resources>
 
 
-    <style name="MainActivity_style_searchView" parent="Widget.AppCompat.SearchView">
-
+    <style name="style_searchView" parent="Widget.AppCompat.SearchView">
         <item name="suggestionRowLayout">@layout/layout_main</item>
-        <item name="android:queryHint">@string/mainActivity_text_for_search_input</item>
+        <item name="android:queryHint">@string/text_for_search_input</item>
+        <item name="android:iconifiedByDefault">false</item>
         <item name="queryBackground">@color/color_submit_background_search</item>
+    </style>
+
+    <style name="style_progressBar" parent="Widget.AppCompat.ProgressBar">
 
     </style>
 
+    <style name="style_primary_text" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@color/color_primary_text</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="style_option_text" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/color_option_text</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
 </resources>

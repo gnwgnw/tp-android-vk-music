@@ -2,9 +2,12 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <color name="color_primary">#174d65</color>
+    <color name="color_primary">#1e90a8</color>
     <color name="color_primary_dark">#313741</color>
     <color name="color_primary_text">#174d65</color>
+    <color name="color_option_text">#ffffff</color>
+    <color name="color_transparent">#80ffffff</color>
+    <color name="color_list_background">#efefef</color>
     <color name="color_background_search">#424855</color>
     <color name="color_submit_background_search">#ff176a82</color>
 

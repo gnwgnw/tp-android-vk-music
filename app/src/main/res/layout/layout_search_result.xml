@@ -1,16 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#efefef"
-    android:orientation="vertical"
     >
 
-    <include
-        android:id="@+id/searchResult_tool_bar"
+    <com.tp.vkplayer.widgets.CustomToolBar
+        android:id="@+id/search_result_tool_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        layout="@layout/layout_tool_bar"
+        android:background="@color/color_primary"
+        android:layout_alignParentTop="true"
         />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/search_result_textview_no_found"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_tool_bar"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#000000"
+        android:paddingRight="5dp"
+        style="@style/style_primary_text"
+        android:text="@string/text_nothing_find"
+        android:textSize="24sp"
+        android:visibility="gone"
+        />
+
+    <ListView
+        android:id="@+id/search_result_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_tool_bar"
+        android:background="@color/color_list_background"
+        android:visibility="invisible"
+        android:layout_above="@+id/search_result_now_playing"
+        />
+
+    <com.tp.vkplayer.widgets.CustomNowPlayingSong
+        android:id="@+id/search_result_now_playing"
+        android:layout_width="fill_parent"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_primary"
+        android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/search_result_progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_activity_textview_on_progress_bar"
+        android:layout_marginTop="50dp"
+        android:layout_centerInParent="true"
+        style="@style/style_progressBar"
+        android:indeterminate="true"
+        android:visibility="visible"
+        />
+
+</RelativeLayout>

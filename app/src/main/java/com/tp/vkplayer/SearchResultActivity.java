@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class SearchResultActivity extends ActionBarActivity implements API.APIListener {
 
-	private final int MAX_SEARCH = 50;
+	private final int MAX_SEARCH = 300;
 	private final List<SongObject> songs = new LinkedList<>();
 
 	private API api;

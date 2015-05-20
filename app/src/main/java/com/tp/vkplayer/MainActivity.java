@@ -154,13 +154,11 @@ public class MainActivity extends Activity implements API.APIListener {
 
 		@Override
 		protected Void doInBackground(Integer... params) {
-			for (int i = 0; i < 2; i++) {
-				try {
-					TimeUnit.SECONDS.sleep(2);
-
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			return null;
 		}

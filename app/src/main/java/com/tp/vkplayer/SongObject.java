@@ -11,6 +11,7 @@ public class SongObject {
 	private String artist;
 	private String title;
 	private String url;
+	//TODO album img - iTunes
 
 	public SongObject(String artist, String title, String url) {
 		this.artist = artist;

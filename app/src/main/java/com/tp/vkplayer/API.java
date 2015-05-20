@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,9 +95,14 @@ public class API {
 
 	public void searchSongs(String query, int performer, int count, int offset) {
 		final Map<String, String> params = new HashMap<>();
+		try {
+			params.put("q", URLEncoder.encode(query, "utf-8"));
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		params.put("access_token", accessToken);
 		params.put("auto_complete", String.valueOf(1));
-		params.put("q", query);
 		params.put("performer_only", String.valueOf(performer));
 		params.put("count", String.valueOf(count));
 		params.put("offset", String.valueOf(offset));

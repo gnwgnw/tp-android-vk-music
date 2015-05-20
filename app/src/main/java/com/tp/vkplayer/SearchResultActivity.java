@@ -143,13 +143,18 @@ public class SearchResultActivity extends MusicControllerActivity implements API
 
 	@Override
 	public void onSearchDone(List<SongObject> songs) {
-		Log.e("SEARCH", songs.toString());
-		this.songs.addAll(songs);
-		adapter.notifyDataSetChanged();
-        seekHandler.sendEmptyMessage(setSongsMsg);
-		findViewById(R.id.search_result_list_view).setVisibility(View.VISIBLE);
-		findViewById(R.id.search_result_textview_no_found).setVisibility(View.GONE);
-	}
+        findViewById(R.id.search_result_progress_bar).setVisibility(View.GONE);
+        Log.e("SEARCH", songs.toString());
+        this.songs.addAll(songs);
+        if (this.songs.size() == 0) {
+            findViewById(R.id.search_result_textview_no_found).setVisibility(View.VISIBLE);
+        }
+        else {
+            adapter.notifyDataSetChanged();
+            findViewById(R.id.search_result_list_view).setVisibility(View.VISIBLE);
+            seekHandler.sendEmptyMessage(setSongsMsg);
+        }
+    }
 
     @Override
     protected void onHandleMessage(Message msg) {

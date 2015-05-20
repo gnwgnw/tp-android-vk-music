@@ -25,7 +25,7 @@
         style="@style/style_primary_text"
         android:text="@string/text_nothing_find"
         android:textSize="24sp"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 
     <ListView
@@ -45,6 +45,18 @@
         android:layout_alignParentBottom="true"
         android:background="@color/color_primary"
         android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/search_result_progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_activity_textview_on_progress_bar"
+        android:layout_marginTop="50dp"
+        android:layout_centerInParent="true"
+        style="@style/style_progressBar"
+        android:indeterminate="true"
+        android:visibility="visible"
         />
 
 </RelativeLayout>

@@ -1,20 +1,10 @@
 package com.tp.vkplayer;
 
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
-import android.os.SystemClock;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,132 +15,59 @@ import java.util.ArrayList;
  * Created by S.Grechkin-Pogrebnyakov on 18.05.2015.
  */
 
-public class PlayControlActivity extends Activity {
+public class PlayControlActivity extends MusicControllerActivity {
 
-    private PlayMusicService playMusicService;
-    private boolean musicBound=false;
     private SeekBar seekBar;
-    private TextView songTitleView;
-    private TextView artistNameView;
-    private int seekMsg = 42;
     private PlayMusicService.RepeatMode repeatMode;
     private boolean randomPlay;
 
-
-    private Handler seekHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if( msg.what == seekMsg ) {
-                if( playMusicService == null || !playMusicService.isPlay ) {
-                    sendEmptyMessageDelayed(seekMsg, 500);
-                    return;
-                }
-                seekBar.setProgress(getCurrentPosition());
-                seekBar.setMax(getDuration());
-                seekBar.setSecondaryProgress(getBufferPosition());   // for buffer progress
-                songTitleView.setText(getSongName());
-                artistNameView.setText(getSongArtist());
-                if (isPlaying() || !isLoaded()) {
-                    sendEmptyMessageDelayed(seekMsg, 1000);
-                }
+    protected void onHandleMessage(Message msg) {
+        if( msg.what == seekMsg ) {
+            if( playMusicService == null || !playMusicService.isPlay ) {
+                seekHandler.sendEmptyMessageDelayed(seekMsg, 500);
+                return;
             }
-        }
-    };
-
-
-    //connect to the service
-    private ServiceConnection musicConnection = new ServiceConnection(){
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            PlayMusicService.MusicBinder binder = (PlayMusicService.MusicBinder)service;
-            //get service
-            playMusicService = binder.getService();
-            musicBound = true;
-            repeatMode = getRepeatMode();
-            randomPlay = isRandomPlay();
-
-            // TODO убрать это отсюда!!!
-            ArrayList<SongObject> songs = new ArrayList<SongObject>();
-            SongObject testSong = new SongObject("Serg", "blabla", "/sdcard/Tuneblast Music/Guns N' Roses - Knockin' On Heaven's Door.mp3");
-            songs.add(testSong);
-            testSong = new SongObject("Vasya", "qwerty", "/sdcard/Tuneblast Music/180194403.mp3");
-            songs.add(testSong);
-            testSong = new SongObject("111", "222", "https://cs1-35v4.vk-cdn.net/p19/e53261ad32f5dd.mp3?extra=emCxk1n5F8wPwQQwZ3PfyUi8Qhx_-HBCzOvbpx7E3O0cOHS7I1YbxRb9TjxmHv5ZcnURn7jYVxSqeZNJM6tlz8cf9jQ");
-            songs.add(testSong);
-            playMusicService.setSongs(songs);
-            playMusicService.setSong(0);
-            startPlay();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            musicBound = false;
-        }
-    };
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if ( !musicBound ) {
-            Intent playIntent = new Intent( this, PlayMusicService.class );
-            bindService( playIntent, musicConnection, Context.BIND_AUTO_CREATE );
+            seekBar.setProgress(getCurrentPosition());
+            seekBar.setMax(getDuration());
+            seekBar.setSecondaryProgress(getBufferPosition());   // for buffer progress
+            songTitleView.setText(getSongName());
+            artistNameView.setText(getSongArtist());
+            if (isPlaying() || !isLoaded()) {
+                seekHandler.sendEmptyMessageDelayed(seekMsg, 1000);
+            }
         }
     }
 
-//    Thread seekThread;
+    protected void onConnected() {
+        repeatMode = getRepeatMode();
+        randomPlay = isRandomPlay();
+
+//        // TODO убрать это отсюда!!!
+//        ArrayList<SongObject> songs = new ArrayList<SongObject>();
+//        SongObject testSong = new SongObject("Serg", "blabla", "/sdcard/Tuneblast Music/Guns N' Roses - Knockin' On Heaven's Door.mp3");
+//        songs.add(testSong);
+//        testSong = new SongObject("Vasya", "qwerty", "/sdcard/Tuneblast Music/180194403.mp3");
+//        songs.add(testSong);
+//        testSong = new SongObject("111", "222", "https://cs1-35v4.vk-cdn.net/p19/e53261ad32f5dd.mp3?extra=emCxk1n5F8wPwQQwZ3PfyUi8Qhx_-HBCzOvbpx7E3O0cOHS7I1YbxRb9TjxmHv5ZcnURn7jYVxSqeZNJM6tlz8cf9jQ");
+//        songs.add(testSong);
+//        playMusicService.setSongs(songs);
+//        playMusicService.setSong(0);
+//        startPlay();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_play_control);
 
-        songTitleView = (TextView)findViewById(R.id.play_control_song_name);
-        artistNameView = (TextView)findViewById(R.id.play_control_artist);
+        pauseImageResource  = R.drawable.play_control_activity_pause_button;
+        playImageResource   = R.drawable.play_control_activity_play_button;
 
-        Intent playIntent = new Intent( this, PlayMusicService.class );
-        startService( playIntent );
+        songTitleView   = (TextView)    findViewById(R.id.play_control_song_name);
+        artistNameView  = (TextView)    findViewById(R.id.play_control_artist);
+        playPauseButton = (ImageButton) findViewById(R.id.play_control_play_button);
+        seekBar         = (SeekBar)     findViewById(R.id.play_control_seekBar);
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                int currentPosition = 0;
-//                while (true) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        return;
-//                    }
-//                    if( playMusicService == null || !playMusicService.isPlaying())
-//                        continue;
-//                    currentPosition = getCurrentPosition();
-//                    final int total = getDuration();
-//                    //final String totalTime = getAsTime(total);
-//                    //final String curTime = getAsTime(currentPosition);
-//
-//                    seekBar.setMax(total); //song duration
-//                    seekBar.setProgress(currentPosition);  //for current song progress
-//                    seekBar.setSecondaryProgress(playMusicService.getBufferPosition());   // for buffer progress
-////                    runOnUiThread(new Runnable() {
-////                        @Override
-////                        public void run() {
-////                            if (isPlaying()) {
-////                                if (!playPauseButton.isChecked()) {
-////                                    playPauseButton.setChecked(true);
-////                                }
-////                            } else {
-////                                if (playPauseButton.isChecked()) {
-////                                    playPauseButton.setChecked(false);
-////                                }
-////                            }
-////                            //musicDuration.setText(totalTime);
-////                            //musicCurLoc.setText(curTime);
-////                        }
-////                    });
-//                }
-//            }
-//        }).start();
-
-        seekBar = (SeekBar)findViewById(R.id.play_control_seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private boolean touched = false;
             @Override
@@ -170,7 +87,6 @@ public class PlayControlActivity extends Activity {
                 touched = false;
             }
         });
-        final ImageButton playPauseButton = (ImageButton)findViewById(R.id.play_control_play_button);
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,60 +129,51 @@ public class PlayControlActivity extends Activity {
                 changeRandomMode();
             }
         });
-    }
 
 
-//    private void setController() {
-//        controller = new MusicController(this);
-//        controller.setPrevNextListeners(new View.OnClickListener() {
+//        new Thread(new Runnable() {
 //            @Override
-//            public void onClick(View v) {
-//                playNext();
+//            public void run() {
+//                int currentPosition = 0;
+//                while (true) {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        return;
+//                    }
+//                    if( playMusicService == null || !playMusicService.isPlaying())
+//                        continue;
+//                    currentPosition = getCurrentPosition();
+//                    final int total = getDuration();
+//                    //final String totalTime = getAsTime(total);
+//                    //final String curTime = getAsTime(currentPosition);
+//
+//                    seekBar.setMax(total); //song duration
+//                    seekBar.setProgress(currentPosition);  //for current song progress
+//                    seekBar.setSecondaryProgress(playMusicService.getBufferPosition());   // for buffer progress
+////                    runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            if (isPlaying()) {
+////                                if (!playPauseButton.isChecked()) {
+////                                    playPauseButton.setChecked(true);
+////                                }
+////                            } else {
+////                                if (playPauseButton.isChecked()) {
+////                                    playPauseButton.setChecked(false);
+////                                }
+////                            }
+////                            //musicDuration.setText(totalTime);
+////                            //musicCurLoc.setText(curTime);
+////                        }
+////                    });
+//                }
 //            }
-//        }, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                playPrev();
-//            }
-//        });
-//        controller.setMediaPlayer(this);
-//        controller.setAnchorView(findViewById(R.id.songAlbum));
-//        controller.setEnabled(true);
-//    }
+//        }).start();
 
-    private void startPlay() {
-        if( playMusicService != null && musicBound ) {
-            playMusicService.playSong();
-            ((ImageButton) findViewById(R.id.play_control_play_button)).setImageResource(R.drawable.pause_button);
-            seekHandler.sendEmptyMessage(seekMsg);
-        }
+
     }
 
-    private void pausePlay() {
-        if( playMusicService != null && musicBound ) {
-            playMusicService.pausePlayer();
-            ((ImageButton) findViewById(R.id.play_control_play_button)).setImageResource(R.drawable.play_button);
-        }
-    }
-
-
-    //play next
-    private void playNext(){
-        if( playMusicService != null && musicBound ) {
-            playMusicService.playNext();
-            ((ImageButton) findViewById(R.id.play_control_play_button)).setImageResource(R.drawable.pause_button);
-            seekHandler.sendEmptyMessage(seekMsg);
-        }
-    }
-
-    //play previous
-    private void playPrev(){
-        if( playMusicService != null && musicBound ) {
-            playMusicService.playPrev();
-            ((ImageButton) findViewById(R.id.play_control_play_button)).setImageResource(R.drawable.pause_button);
-            seekHandler.sendEmptyMessage(seekMsg);
-        }
-    }
 
     private void changeRepeatMode() {
         if (playMusicService == null || ! musicBound )
@@ -305,69 +212,6 @@ public class PlayControlActivity extends Activity {
             playMusicService.setRandomPlay(true);
             randomButton.setImageResource(R.drawable.shuffle_button);
         }
-    }
-
-    private PlayMusicService.RepeatMode getRepeatMode() {
-        if( playMusicService != null && musicBound )
-            return playMusicService.getRepeatMode();
-        else return PlayMusicService.RepeatMode.DO_NOT_REPEAT;
-    }
-
-    private boolean isRandomPlay() {
-        return playMusicService != null && musicBound && playMusicService.isRandomPlay();
-    }
-
-    private int getDuration() {
-        if ( playMusicService != null && musicBound )
-            return playMusicService.getDuration();
-        else return 0;
-    }
-
-    private int getBufferPosition() {
-        if ( playMusicService != null && musicBound )
-            return playMusicService.getBufferPosition();
-        else return 0;
-    }
-
-    private int getCurrentPosition() {
-        if ( playMusicService != null && musicBound )
-            return playMusicService.getPosition();
-        else return 0;
-    }
-
-    private String getSongName() {
-        if ( playMusicService != null && musicBound )
-            return playMusicService.getSongName();
-        else
-            return null;
-    }
-
-    private String getSongArtist() {
-        if ( playMusicService != null && musicBound )
-            return playMusicService.getSongArtist();
-        else
-            return null;
-    }
-
-    private boolean isPlaying() {
-        return playMusicService != null && musicBound && playMusicService.isPlaying();
-    }
-
-    private boolean isLoaded() {
-        return playMusicService == null || !musicBound || playMusicService.isLoaded();
-    }
-
-    private void seekTo(int pos) {
-        if ( playMusicService != null && musicBound )
-            playMusicService.seek(pos);
-    }
-
-    @Override
-    protected void onDestroy() {
-        unbindService(musicConnection);
-        playMusicService = null;
-        //seekThread.stop();
-        super.onDestroy();
     }
 
 }

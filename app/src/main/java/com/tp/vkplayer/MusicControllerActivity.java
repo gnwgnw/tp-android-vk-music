@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -65,6 +66,12 @@ public abstract class MusicControllerActivity extends Activity {
         if ( !musicBound ) {
             Intent playIntent = new Intent( this, PlayMusicService.class );
             bindService( playIntent, musicConnection, Context.BIND_AUTO_CREATE );
+        } else {
+            if (isPlaying()) {
+                startPlay();
+            } else {
+                pausePlay();
+            }
         }
     }
 
@@ -87,6 +94,7 @@ public abstract class MusicControllerActivity extends Activity {
         if( playMusicService != null && musicBound ) {
             playMusicService.pausePlayer();
             playPauseButton.setImageResource(playImageResource);
+            seekHandler.sendEmptyMessage(seekMsg);
         }
     }
 

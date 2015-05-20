@@ -32,7 +32,7 @@
             android:paddingRight="5dp"
             android:paddingTop="2dp"
             android:textSize="14sp"
-            android:text="qwerty"
+            android:text=""
             />
         
         <TextView
@@ -47,7 +47,7 @@
             android:paddingTop="5dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="tredsfdgfh"
+            android:text=""
             />
 
 

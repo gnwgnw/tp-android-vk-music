@@ -22,6 +22,8 @@ public class PlayControlActivity extends MusicControllerActivity {
     private SeekBar seekBar;
     private PlayMusicService.RepeatMode repeatMode;
     private boolean randomPlay;
+    ImageButton repeatButton;
+    ImageButton randomButton;
 
     protected void onHandleMessage(Message msg) {
         if( msg.what == seekMsg ) {
@@ -43,6 +45,22 @@ public class PlayControlActivity extends MusicControllerActivity {
     protected void onConnected() {
         repeatMode = getRepeatMode();
         randomPlay = isRandomPlay();
+        if (randomPlay) randomButton.setImageResource(R.drawable.shuffle_button);
+        else randomButton.setImageResource(R.drawable.shuffle_button_disabled);
+        switch (repeatMode) {
+            case DO_NOT_REPEAT:
+                repeatButton.setImageResource(R.drawable.repeat_button_disabled);
+                break;
+            case REPEAT_ALL:
+                repeatButton.setImageResource(R.drawable.repeat_button_repeat_all);
+                break;
+            case REPEAT_ONE:
+                repeatButton.setImageResource(R.drawable.repeat_button_repeat_one);
+                break;
+        }
+        if (isPlaying()){
+            startPlay();
+        } else pausePlay();
 
 //        // TODO убрать это отсюда!!!
 //        ArrayList<SongObject> songs = new ArrayList<SongObject>();
@@ -117,14 +135,14 @@ public class PlayControlActivity extends MusicControllerActivity {
                     playNext();
             }
         });
-        ImageButton repeatButton = (ImageButton)findViewById(R.id.play_control_repeat_button);
+        repeatButton = (ImageButton)findViewById(R.id.play_control_repeat_button);
         repeatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeRepeatMode();
             }
         });
-        ImageButton randomButton = (ImageButton)findViewById(R.id.play_control_random_button);
+        randomButton = (ImageButton)findViewById(R.id.play_control_random_button);
         randomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,7 +198,6 @@ public class PlayControlActivity extends MusicControllerActivity {
     private void changeRepeatMode() {
         if (playMusicService == null || ! musicBound )
             return;
-        ImageButton repeatButton = (ImageButton)findViewById(R.id.play_control_repeat_button);
         switch (repeatMode) {
             case DO_NOT_REPEAT:
                 repeatMode = PlayMusicService.RepeatMode.REPEAT_ALL;
@@ -204,7 +221,6 @@ public class PlayControlActivity extends MusicControllerActivity {
     private void changeRandomMode() {
         if (playMusicService == null || ! musicBound )
             return;
-        ImageButton randomButton = (ImageButton)findViewById(R.id.play_control_random_button);
         if (randomPlay) {
             randomPlay = false;
             playMusicService.setRandomPlay(false);

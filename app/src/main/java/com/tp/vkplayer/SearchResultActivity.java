@@ -15,12 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tp.vkplayer.api.API;
 import com.tp.vkplayer.base.SongArrayAdapter;
 import com.tp.vkplayer.base.SongObject;
+import com.tp.vkplayer.widgets.CustomNowPlayingSong;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,6 +42,8 @@ public class SearchResultActivity extends MusicControllerActivity implements API
 	private String query;
 	private int performer;
 
+    CustomNowPlayingSong nowPlayingSong;
+
     private int setSongsMsg = 13;
     private int setOneSongMsg = 22;
 
@@ -47,10 +52,26 @@ public class SearchResultActivity extends MusicControllerActivity implements API
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_search_result);
 
+        pauseImageResource  = R.drawable.play_control_activity_pause_button;;
+        playImageResource   = R.drawable.play_control_activity_play_button;
+
+        songTitleView   = (TextView)    findViewById(R.id.now_playing_song_title);
+        artistNameView  = (TextView)    findViewById(R.id.now_playing_song_artist);
+        playPauseButton = (ImageButton) findViewById(R.id.now_playing_button_play);
+
         Intent playIntent = new Intent( this, PlayMusicService.class );
         startService( playIntent );
 
 		adapter = new SongArrayAdapter(this, songs);
+
+        nowPlayingSong = (CustomNowPlayingSong)findViewById(R.id.search_result_now_playing);
+        nowPlayingSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchResultActivity.this, PlayControlActivity.class);
+                startActivity(intent);
+            }
+        });
 
 		ListView listView = (ListView) findViewById(R.id.search_result_list_view);
 		listView.setAdapter(adapter);
@@ -63,6 +84,37 @@ public class SearchResultActivity extends MusicControllerActivity implements API
                 msg.setData(bnd);
                 msg.what = setOneSongMsg;
                 seekHandler.sendMessage(msg);
+            }
+        });
+
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( playMusicService != null && musicBound )
+                    if ( !isPlaying() ) {
+                        startPlay();
+                    }
+                    else {
+                        pausePlay();
+                    }
+                else
+                    Toast.makeText(getApplicationContext(), "Пожалуйста, подождите.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        songTitleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchResultActivity.this, PlayControlActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        artistNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchResultActivity.this, PlayControlActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -120,7 +172,9 @@ public class SearchResultActivity extends MusicControllerActivity implements API
             if (playMusicService!=null && musicBound) {
                 Bundle bnd = msg.getData();
                 playMusicService.setSong((int)bnd.getLong("song"));
+                playMusicService.resetPlay();
                 startPlay();
+                nowPlayingSong.setVisibility(View.VISIBLE);
             } else
                 seekHandler.sendMessage(msg);
         }
@@ -128,5 +182,12 @@ public class SearchResultActivity extends MusicControllerActivity implements API
 
     @Override
     protected void onConnected() {
+        if (isPlaying()) {
+            startPlay();
+            nowPlayingSong.setVisibility(View.VISIBLE);
+        } else if(nowPlayingSong.getVisibility() == View.VISIBLE) {
+            pausePlay();
+        }
+
     }
 }

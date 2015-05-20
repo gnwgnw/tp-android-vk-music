@@ -178,7 +178,7 @@ public class PlayMusicService extends Service implements
         mediaPlayer.start();
     }
 
-    private void resetPlay() {
+    public void resetPlay() {
         mediaPlayer.reset();
         isPlay = false;
         bufferPosition = 0;

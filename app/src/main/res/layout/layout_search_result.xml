@@ -37,16 +37,13 @@
         android:visibility="invisible"
         />
 
-    <!--<TextView-->
-        <!--android:id="@+id/search_result_count_result"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="25dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:text="@string/text_count_result"-->
-        <!--style="@style/style_option_text"-->
-        <!--android:gravity="right"-->
-        <!--android:textSize="20sp"-->
-        <!--android:background="@color/color_primary"-->
-        <!--/>-->
+    <com.tp.vkplayer.widgets.CustomNowPlayingSong
+        android:id="@+id/search_result_now_playing"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_primary"
+        android:visibility="visible"
+        />
 
 </RelativeLayout>

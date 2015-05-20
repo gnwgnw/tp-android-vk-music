@@ -26,7 +26,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 	private API api;
 	private SongArrayAdapter adapter;
 	private String query;
-
+	private int performer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +39,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 		//TODO set listView clickListener
 
 		query = getIntent().getExtras().getString(MainActivity.QUERY);
+		performer = getIntent().getExtras().getInt(MainActivity.PERFORMER);
 
 		api = new API(this, this);
 		api.initialize();
@@ -72,7 +73,7 @@ public class SearchResultActivity extends ActionBarActivity implements API.APILi
 	@Override
 	public void onAccessTokenCame() {
 		Log.i("TOKEN", "Token");
-		api.searchSongs(query, 0, MAX_SEARCH, 0);
+		api.searchSongs(query, performer, MAX_SEARCH, 0);
 	}
 
 	@Override

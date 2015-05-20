@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends Activity implements API.APIListener {
 
 	public static final String QUERY = "query";
+	public static final String PERFORMER = "performer";
 
 	private static final String TAG = "MainActivity";
 	private static ViewFlipper flipper;
@@ -38,18 +39,14 @@ public class MainActivity extends Activity implements API.APIListener {
 	public boolean isSearchSongs() {
 		TextView searchSongs =
 				(TextView) findViewById(R.id.main_activity_textview_search_songs);
-		if (searchSongs.getVisibility() == View.VISIBLE)
-			return true;
-		else return false;
+		return searchSongs.getVisibility() == View.VISIBLE;
 	}
 
 	// выбран ли поиск по Имени исполнителя
 	public boolean isSearchArtists() {
 		TextView searchArtists =
 				(TextView) findViewById(R.id.main_activity_textview_search_artists);
-		if (searchArtists.getVisibility() == View.VISIBLE)
-			return true;
-		else return false;
+		return searchArtists.getVisibility() == View.VISIBLE;
 	}
 
 	protected boolean onTouchHandler(View v, MotionEvent event) {
@@ -117,12 +114,12 @@ public class MainActivity extends Activity implements API.APIListener {
 			@Override
 			public void onClick(View v) {
 
-				//TODO send performer
 				//   Intent i = new Intent(MainActivity.this, PlayControlActivity.class);
 				Intent i = new Intent(MainActivity.this, SearchResultActivity.class);
 				CustomSearchView searchView = (CustomSearchView)
 						findViewById(R.id.main_activity_edittext_input);
 				i.putExtra(QUERY, searchView.getQuery());
+				i.putExtra(PERFORMER, isSearchSongs() ? 0 : 1);
 				startActivity(i);
 			}
 		});

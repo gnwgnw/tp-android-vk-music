@@ -65,6 +65,7 @@ public class API {
 		final WebView webView = new WebView(activity);
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setDomStorageEnabled(true);
+		webView.getSettings().setSavePassword(false);
 
 		webView.setWebViewClient(new WebViewClient() {
 			@Override

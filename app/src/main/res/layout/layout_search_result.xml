@@ -40,7 +40,7 @@
     <com.tp.vkplayer.widgets.CustomNowPlayingSong
         android:id="@+id/search_result_now_playing"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:layout_alignParentBottom="true"
         android:background="@color/color_primary"
         android:visibility="visible"

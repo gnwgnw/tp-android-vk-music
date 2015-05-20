@@ -58,7 +58,7 @@ public class PlayMusicService extends Service implements
         return START_STICKY;
     }
 
-    public void initMusicPlayer() {
+    private void initMusicPlayer() {
         //set player props
         mediaPlayer.setWakeMode(getApplicationContext(),
                 PowerManager.PARTIAL_WAKE_LOCK);
